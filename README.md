@@ -10,6 +10,25 @@
 > the other services. Changes made after the copy are in this repository's commit
 > history. The original license, [CC BY-NC 4.0](LICENSE.md), still applies.
 
+## My setup (Hadar Lavinsky, Classes 10–12 project)
+
+I set up and connected my own copy of this app as part of the course's task-app project:
+
+| Service | What it does in my app | Status |
+| --- | --- | --- |
+| Supabase (project `task-app-2026-hadar`) | Database, sign-in, image storage, Edge Functions | ✅ Working |
+| Google sign-in | "Sign in with Google" through Supabase Auth | ✅ Working |
+| OpenAI (`gpt-4o-mini`) | Gives every new task an automatic label | ✅ Working |
+| Stripe (test mode) | "TaskMaster Premium" subscription at $10/month, plus the customer portal | ✅ Working |
+| Vercel | Puts the app online | ⏳ Next step |
+
+Tested on my computer (`npm run dev`, http://localhost:3000): signing in with Google, creating a task that got
+an AI label, attaching an image, upgrading to Premium with Stripe's test card, and opening the customer portal.
+
+All keys and passwords stay in `.env.local` (ignored by Git) and in Supabase secrets, never in this repository.
+
+---
+
 A full-stack SaaS task management application built with Next.js and Supabase, featuring AI-powered task labeling, image attachments, and Stripe subscriptions.
 
 - Specific tutorial documents can be found in the `/tutorial` folder.
