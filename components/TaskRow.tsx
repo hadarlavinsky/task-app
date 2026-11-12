@@ -11,9 +11,15 @@ interface TaskRowProps {
   task: Task;
   onDelete: (taskId: string) => void;
   onToggleComplete: (taskId: string, completed: boolean) => void;
+  subtaskCount?: { done: number; total: number };
 }
 
-const TaskRow = ({ task, onDelete, onToggleComplete }: TaskRowProps) => {
+const TaskRow = ({
+  task,
+  onDelete,
+  onToggleComplete,
+  subtaskCount,
+}: TaskRowProps) => {
   const formatDate = (dateString: string) => {
     return dateString.split("T")[0];
   };
@@ -35,6 +41,18 @@ const TaskRow = ({ task, onDelete, onToggleComplete }: TaskRowProps) => {
         >
           {task.title}
         </Link>
+        {subtaskCount && subtaskCount.total > 0 && (
+          <span
+            className={`ml-2 rounded-full px-2 py-0.5 text-xs ${
+              subtaskCount.done === subtaskCount.total
+                ? "bg-green-100 text-green-700"
+                : "bg-gray-100 text-gray-600"
+            }`}
+            title="Checklist steps done"
+          >
+            ☑ {subtaskCount.done}/{subtaskCount.total}
+          </span>
+        )}
       </TableCell>
       <TableCell className="py-2">
         {task.label && (

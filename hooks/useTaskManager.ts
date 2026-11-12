@@ -10,6 +10,7 @@ import {
 
 const MAX_FILE_SIZE = 1024 * 1024; // 1MB
 const FUNCTION_ENDPOINT = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/create-task-with-ai`;
+const QUICK_ADD_ENDPOINT = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/quick-add-task`;
 
 interface UseTaskManagerReturn
   extends TaskState,
@@ -225,6 +226,42 @@ export function useTaskManager(taskId?: string): UseTaskManagerReturn {
     }
   };
 
+  // Quick add: OpenAI turns one sentence into a task (title, date, label).
+  const quickAddTask = async (text: string) => {
+    try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      const now = new Date();
+      // The user's own date and weekday, so "tomorrow" means their tomorrow.
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
+      const weekday = now.toLocaleDateString("en-US", { weekday: "long" });
+
+      const response = await fetch(QUICK_ADD_ENDPOINT, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session!.access_token}`,
+        },
+        body: JSON.stringify({ text, today, weekday }),
+      });
+
+      const taskData = await response.json();
+      if (!response.ok || taskData?.error) {
+        throw new Error(taskData?.error || "Failed to add the task");
+      }
+
+      setTasks((prev) => [taskData, ...prev]);
+      setError(null);
+      return taskData as Task;
+    } catch (error: any) {
+      console.error("Error in quick add:", error);
+      setError(error.message);
+      throw error;
+    }
+  };
+
   const deleteTask = async (taskIdToDelete: string) => {
     try {
       const { error } = await supabase
@@ -289,6 +326,7 @@ export function useTaskManager(taskId?: string): UseTaskManagerReturn {
 
     // Task list operations
     createTask,
+    quickAddTask,
     deleteTask,
     toggleTaskComplete,
     refreshTasks,

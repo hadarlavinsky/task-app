@@ -38,6 +38,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/components/hooks/use-toast";
 import Image from "next/image";
 import { useDropzone } from "react-dropzone";
+import { SubtaskChecklist } from "@/components/SubtaskChecklist";
 
 function TaskForm() {
   const params = useSearchParams();
@@ -201,6 +202,10 @@ function TaskForm() {
             value={task.description || ""}
             onChange={(e) => updateTask({ description: e.target.value })}
           />
+        </div>
+        <div className="grid w-full items-center gap-1.5">
+          <Label>Checklist</Label>
+          <SubtaskChecklist taskId={task.task_id} userId={task.user_id} />
         </div>
         <div className="flex items-center space-x-2">
           <Checkbox

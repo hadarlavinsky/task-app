@@ -12,9 +12,15 @@ interface TaskListProps {
   tasks: Task[];
   onDelete: (taskId: string) => Promise<void>;
   onToggleComplete: (taskId: string, completed: boolean) => Promise<void>;
+  subtaskCounts?: Record<string, { done: number; total: number }>;
 }
 
-const TaskList = ({ tasks, onDelete, onToggleComplete }: TaskListProps) => {
+const TaskList = ({
+  tasks,
+  onDelete,
+  onToggleComplete,
+  subtaskCounts = {},
+}: TaskListProps) => {
   return (
     <Table>
       <TableHeader>
@@ -33,6 +39,7 @@ const TaskList = ({ tasks, onDelete, onToggleComplete }: TaskListProps) => {
             task={task}
             onDelete={onDelete}
             onToggleComplete={onToggleComplete}
+            subtaskCount={subtaskCounts[task.task_id]}
           />
         ))}
       </TableBody>

@@ -5,6 +5,8 @@ import { useTaskManager } from "@/hooks/useTaskManager";
 import { Button } from "@/components/ui/button";
 import TaskList from "@/components/TaskList";
 import { CreateTaskForm } from "@/components/CreateTaskForm";
+import { QuickAddBar } from "@/components/QuickAddBar";
+import { useSubtaskCounts } from "@/hooks/useSubtasks";
 import { PlusCircle, ClipboardList } from "lucide-react";
 import {
   Dialog,
@@ -17,8 +19,15 @@ import {
 
 export default function Dashboard() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { createTask, refreshTasks, tasks, deleteTask, toggleTaskComplete } =
-    useTaskManager();
+  const {
+    createTask,
+    quickAddTask,
+    refreshTasks,
+    tasks,
+    deleteTask,
+    toggleTaskComplete,
+  } = useTaskManager();
+  const subtaskCounts = useSubtaskCounts(tasks.length);
 
   const handleCreateTask = async (title: string, description: string) => {
     await createTask(title, description);
@@ -49,12 +58,14 @@ export default function Dashboard() {
           </DialogContent>
         </Dialog>
       </div>
+      <QuickAddBar onQuickAdd={quickAddTask} />
       {tasks.length > 0 ? (
         <div className="border rounded-md">
           <TaskList
             tasks={tasks}
             onDelete={deleteTask}
             onToggleComplete={toggleTaskComplete}
+            subtaskCounts={subtaskCounts}
           />
         </div>
       ) : (

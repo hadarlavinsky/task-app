@@ -39,6 +39,36 @@ export type Database = {
         }
         Relationships: []
       }
+      subtasks: {
+        Row: {
+          completed: boolean
+          created_at: string | null
+          position: number
+          subtask_id: string
+          task_id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string | null
+          position?: number
+          subtask_id?: string
+          task_id: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string | null
+          position?: number
+          subtask_id?: string
+          task_id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       tasks: {
         Row: {
           completed: boolean | null

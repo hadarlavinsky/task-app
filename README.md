@@ -25,6 +25,14 @@ I set up and connected my own copy of this app as part of the course's task-app 
 Tested on my computer (`npm run dev`, http://localhost:3000): signing in with Google, creating a task that got
 an AI label, attaching an image, upgrading to Premium with Stripe's test card, and opening the customer portal.
 
+### Features I added
+
+| Feature | What it does | How it works |
+| --- | --- | --- |
+| **Subtasks checklist** (new data in the database) | Each task has a checklist of steps you can add, tick off and delete; the dashboard shows progress like ☑ 2/5. | New `subtasks` table (`supabase/migrations/9_subtasks.sql`) with Row Level Security, so each user only sees their own steps. |
+| **Quick add with AI** (OpenAI used in a new way) | Type one sentence, such as "Dentist next Tuesday, urgent", and the app creates the task with its title, due date and label. | New Edge Function `quick-add-task`: OpenAI (`gpt-4o-mini`, JSON mode) reads the sentence and returns the fields; the function checks each value before saving. |
+| **Visible top bar** | My Tasks, Profile & Subscription, your plan (Free/Premium) and Sign out on every page. | Rewrote `components/Header.tsx`. |
+
 All keys and passwords stay in `.env.local` (ignored by Git) and in Supabase secrets, never in this repository.
 
 ---
